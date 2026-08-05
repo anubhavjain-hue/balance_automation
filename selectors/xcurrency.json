@@ -1,0 +1,42 @@
+{
+  "login_email": {
+    "selector": "iframe >> getByRole('textbox', { name: 'Email' })",
+    "playwright": "page.frameLocator('iframe').getByRole('textbox', { name: 'Email' })",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-24T14:50:00Z",
+    "notes": "Inside cross-origin iframe at auth.xcurrency.com"
+  },
+  "login_password": {
+    "selector": "iframe >> getByRole('textbox', { name: 'Password' })",
+    "playwright": "page.frameLocator('iframe').getByRole('textbox', { name: 'Password' })",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-24T14:50:00Z",
+    "notes": "Inside cross-origin iframe"
+  },
+  "login_auto_label": {
+    "selector": "iframe >> label[for='ck-auto-login']",
+    "playwright": "page.frameLocator('iframe').locator('label[for=\"ck-auto-login\"]')",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-24T14:50:00Z",
+    "notes": "Must click the LABEL, not the checkbox — label intercepts pointer events on checkbox"
+  },
+  "login_submit": {
+    "selector": "iframe >> button[Sign in]",
+    "playwright": "page.frameLocator('iframe').getByRole('button', { name: 'Sign in' })",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-24T14:50:00Z",
+    "notes": "Inside cross-origin iframe"
+  },
+  "balance_cards": {
+    "selector": "main .ant-pro-card",
+    "playwright": "JS evaluate — find leaf div matching /^[A-Z]{2,4}$/, walk up to .ant-pro-card",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-24T14:50:00Z",
+    "notes": "Ant Design Pro Card grid; currencies confirmed: USD, SGD, CNY, XC"
+  }
+}

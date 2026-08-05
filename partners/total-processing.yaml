@@ -1,0 +1,78 @@
+partner:
+  id: total-processing
+  name: "Total Processing (Nomupay)"
+  dashboard_url: "https://dashboard.totalprocessing.com/"
+
+  credentials:
+    username_env: "TP_USERNAME"
+    password_env: "TP_PASSWORD"
+
+  spa:
+    wait_strategy: "load"
+    post_nav_delay_ms: 3000
+    dismiss_popups: true
+
+  tasks:
+    login:
+      description: "Log into Keycloak-authenticated dashboard"
+      steps:
+        - action: navigate
+          url: "{{dashboard_url}}"
+        - action: fill
+          target: "login_username"
+          value: "{{credentials.username}}"
+        - action: fill
+          target: "login_password"
+          value: "{{credentials.password}}"
+        - action: click
+          target: "login_submit"
+        - action: wait_for_spa
+        - action: dismiss_popup
+
+    report:
+      description: "Download transaction report CSV"
+      depends_on: login
+      merchants: ["Tazapay - EU", "Tazapay - HK"]
+      steps:
+        - action: click
+          target: "nav_transactions"
+        - action: wait_for_spa
+        - action: set_date_range
+          days: 7
+        - action: click
+          target: "download_btn"
+        - action: click
+          target: "csv_all_columns"
+        - action: wait_for_download
+      delivery:
+        type: webhook
+        url_env: "TP_REPORT_WEBHOOK_URL"
+        format: file
+        content_type: "text/csv"
+
+    balances:
+      description: "Scrape balance data from Merchant Funding"
+      depends_on: login
+      merchants: ["Tazapay - EU", "Tazapay - HK"]
+      steps:
+        - action: click
+          target: "nav_finance_group"
+        - action: click
+          target: "nav_merchant_funding"
+        - action: wait_for_spa
+        - action: select_merchants
+          merchants: "{{task.merchants}}"
+        - action: extract_table
+          target: "balances_table"
+          aggregate_by: "currency"
+          aggregate_fields: ["reserve", "scheduled"]
+      delivery:
+        type: webhook
+        url_env: "BALANCES_WEBHOOK_URL"
+        format: json
+
+  scripts:
+    balances: "scripts/total-processing/balances.ts"
+    report: "scripts/total-processing/report.ts"
+
+  selectors_file: "selectors/total-processing.json"

@@ -1,0 +1,183 @@
+{
+  "partner_id": "dlocal",
+  "last_updated": "2026-03-19T11:20:00Z",
+  "selectors": {
+    "login_email": {
+      "css": "input[name='email'], input[inputmode='email'], [data-testid='input-email'] input",
+      "role": "textbox[name=Email]",
+      "source": "vision",
+      "confidence": 0.9,
+      "last_verified": "2026-02-24T07:35:00Z",
+      "notes": "Auth0 login at auth-dashboard.dlocal.com — two-step flow, email first"
+    },
+    "login_password": {
+      "css": "input[type='password'], input[name='password']",
+      "role": "textbox[name=Password]",
+      "source": "vision",
+      "confidence": 0.9,
+      "last_verified": "2026-02-24T07:35:00Z",
+      "notes": "Auth0 password step — shown after email + CONTINUE"
+    },
+    "login_submit": {
+      "css": "button[type='submit'], button[data-action-button-primary='true']",
+      "role": "button[name=CONTINUE]",
+      "source": "vision",
+      "confidence": 0.9,
+      "last_verified": "2026-02-24T07:35:00Z",
+      "notes": "CONTINUE button used on both email and password steps"
+    },
+    "nav_payins": {
+      "css": "button:has(> div:text('Payins'))",
+      "role": "button[name=Payins]",
+      "source": "vision",
+      "confidence": 0.9,
+      "last_verified": "2026-02-24T07:35:00Z",
+      "notes": "Expandable sidebar button — click to reveal Transactions, Refunds, Chargebacks"
+    },
+    "nav_transactions": {
+      "css": "a[href='/payins/transactions']",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-24T07:35:00Z"
+    },
+    "nav_balance": {
+      "css": "button:has(> div:text('Balance'))",
+      "role": "button[name=Balance]",
+      "source": "vision",
+      "confidence": 0.9,
+      "last_verified": "2026-02-24T07:35:00Z",
+      "notes": "Expandable sidebar button — click to reveal Balance report, Withdrawals, etc."
+    },
+    "nav_balance_report": {
+      "css": "a[href='/balance/report']",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-24T07:35:00Z"
+    },
+    "nav_withdrawals": {
+      "css": "a[href='/balance/withdrawals']",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-24T07:35:00Z"
+    },
+    "nav_cleared_transactions": {
+      "css": "a[href='/balance/cleared-transactions']",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-24T07:35:00Z"
+    },
+    "nav_reports": {
+      "css": "a[href='/reports']",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-24T07:35:00Z"
+    },
+    "transactions_export_btn": {
+      "css": "button:has(> :text('Export'))",
+      "role": "button[name=Export]",
+      "source": "vision",
+      "confidence": 0.9,
+      "last_verified": "2026-02-24T07:35:00Z",
+      "notes": "On /payins/transactions page"
+    },
+    "transactions_date_filter": {
+      "css": "[data-testid='date-filter'], .MuiInputBase-root:has(input.Mui-readOnly)",
+      "role": "textbox[name=Date]",
+      "source": "vision",
+      "confidence": 0.8,
+      "last_verified": "2026-02-24T07:35:00Z",
+      "notes": "Date range picker — MUI component with readonly input"
+    },
+    "transactions_search": {
+      "css": "input[placeholder*='Search by reference']",
+      "source": "vision",
+      "confidence": 0.9,
+      "last_verified": "2026-02-24T07:35:00Z"
+    },
+    "transactions_table": {
+      "css": "[role='grid'], table",
+      "source": "vision",
+      "confidence": 0.9,
+      "last_verified": "2026-02-24T07:35:00Z"
+    },
+    "balance_report_export_btn": {
+      "css": "button:has(> :text('Export'))",
+      "role": "button[name=Export]",
+      "source": "vision",
+      "confidence": 0.9,
+      "last_verified": "2026-02-24T07:35:00Z",
+      "notes": "On /balance/report page"
+    },
+    "balance_date_start": {
+      "css": "input[value*='/'][class*='MuiInputBase']:first-of-type",
+      "source": "vision",
+      "confidence": 0.7,
+      "last_verified": "2026-02-24T07:35:00Z",
+      "notes": "Start date textbox on balance report page, format MM/DD/YYYY"
+    },
+    "balance_date_end": {
+      "css": "input[value*='/'][class*='MuiInputBase']:last-of-type",
+      "source": "vision",
+      "confidence": 0.7,
+      "last_verified": "2026-02-24T07:35:00Z",
+      "notes": "End date textbox on balance report page, format MM/DD/YYYY"
+    },
+    "reports_new_schedule_btn": {
+      "css": "button:has(> :text('new scheduled report'))",
+      "role": "button[name='new scheduled report']",
+      "source": "vision",
+      "confidence": 0.9,
+      "last_verified": "2026-02-24T07:35:00Z",
+      "notes": "On /reports page"
+    },
+    "intercom_close": {
+      "css": "button[aria-label='Close'], iframe[name='intercom-launcher-frame']",
+      "source": "vision",
+      "confidence": 0.7,
+      "last_verified": "2026-02-24T07:35:00Z",
+      "notes": "Intercom chat widget — may overlay elements, dismiss if blocking"
+    },
+    "export_dialog_send_btn": {
+      "role": "button[name='SEND REPORT']",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-24T08:36:00Z",
+      "notes": "SEND REPORT button inside the Export transactions report dialog"
+    },
+    "export_dialog_cancel_btn": {
+      "role": "button[name='CANCEL']",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-24T08:36:00Z",
+      "notes": "CANCEL button inside the Export transactions report dialog"
+    },
+    "date_picker_apply_btn": {
+      "role": "button[name='APPLY']",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-24T08:35:00Z",
+      "notes": "APPLY button in the date range picker popup"
+    },
+    "date_picker_cancel_btn": {
+      "role": "button[name='CANCEL']",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-24T08:35:00Z",
+      "notes": "CANCEL button in the date range picker popup"
+    },
+    "date_picker_start_input": {
+      "css": "input[placeholder='MM/DD/YYYY']:first-of-type",
+      "source": "vision",
+      "confidence": 0.9,
+      "last_verified": "2026-02-24T08:35:00Z",
+      "notes": "Start date input inside the date picker popup — triple-click to select, then type new date"
+    },
+    "balance_cards_list": {
+      "css": "main ul li",
+      "source": "script_verified",
+      "confidence": 1.0,
+      "last_verified": "2026-03-19T11:20:00Z",
+      "notes": "4 balance summary cards on /balance/report. Each li: p[0]=title, p[1]=value, p[2]=currency. Titles: AVAILABLE BALANCE, IN TRANSIT TO YOUR BANK, PAYINS IN TRANSIT, CURRENT BALANCE"
+    }
+  }
+}

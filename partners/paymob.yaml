@@ -1,0 +1,30 @@
+partner:
+  id: paymob
+  name: Paymob
+  dashboards:
+    uae: https://payouts-uae.paymobsolutions.com/
+    ksa: https://ksa.paymob.com/portal2/
+
+  credentials:
+    uae_username_env: PAYMOB_UAE_USERNAME
+    uae_password_env: PAYMOB_UAE_PASSWORD
+    uae_totp_secret_env: PAYMOB_UAE_TOTP_SECRET
+    ksa_phone_env: PAYMOB_SA_PHONE_NUMBER
+    ksa_password_env: PAYMOB_SA_PASSWORD
+
+  spa:
+    wait_strategy: domcontentloaded
+    post_nav_delay_ms: 3000
+
+  tasks:
+    balances:
+      description: Fetch AED balance from UAE payouts dashboard and SAR net volume from KSA portal
+      delivery:
+        type: webhook
+        url_env: BALANCES_WEBHOOK_URL
+        format: json
+
+  scripts:
+    balances: "scripts/paymob/balances.ts"
+
+  selectors_file: selectors/paymob.json

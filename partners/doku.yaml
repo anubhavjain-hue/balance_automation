@@ -1,0 +1,54 @@
+partner:
+  id: doku
+  name: DOKU
+  dashboard_url: https://dashboard.doku.com/
+
+  credentials:
+    username_env: DOKU_USERNAME
+    password_env: DOKU_PASSWORD
+
+  spa:
+    wait_strategy: load
+    post_nav_delay_ms: 3000
+    dismiss_popups: true
+
+  tasks:
+    login:
+      description: Login to DOKU dashboard with email + OTP (auto-fetched via IMAP)
+      steps:
+        - action: navigate
+          url: "{{dashboard_url}}"
+        - action: click
+          target: cookie_accept
+          optional: true
+        - action: fill
+          target: login_email
+          value: "{{credentials.username}}"
+        - action: fill
+          target: login_password
+          value: "{{credentials.password}}"
+        - action: click
+          target: login_submit
+        - action: wait
+          ms: 10000
+        - action: bash
+          command: npx tsx src/email-otp.ts
+          result: otp_code
+        - action: fill
+          target: otp_input
+          value: "{{otp_code}}"
+        - action: click
+          target: otp_submit
+
+    balances:
+      description: Fetch Gross Volume + Next Payout from DOKU home page
+      depends_on: login
+      delivery:
+        type: webhook
+        url_env: BALANCES_WEBHOOK_URL
+        format: json
+
+  scripts:
+    balances: "scripts/doku/balances.ts"
+
+  selectors_file: selectors/doku.json

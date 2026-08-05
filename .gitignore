@@ -1,0 +1,24 @@
+# Secrets
+.env
+*.pem
+credentials.json
+token.json
+
+# Temporary files
+.tmp/
+
+# Playwright MCP runtime output
+.playwright-mcp/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Node
+node_modules/
+dist/
+*.tsbuildinfo
+
+# macOS
+.DS_Store

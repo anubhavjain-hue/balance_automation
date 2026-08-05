@@ -1,0 +1,55 @@
+partner:
+  id: xcurrency
+  name: "xCurrency Hubs"
+  dashboard_url: "https://partner.xcurrency.com/"
+
+  credentials:
+    username_env: "XCURRENCY_USERNAME"
+    password_env: "XCURRENCY_PASSWORD"
+
+  spa:
+    wait_strategy: "domcontentloaded"
+    post_nav_delay_ms: 3000
+    dismiss_popups: false
+
+  tasks:
+    login:
+      description: "Log into xCurrency Hubs via cross-origin auth iframe"
+      steps:
+        - action: navigate
+          url: "{{dashboard_url}}"
+        - action: wait
+          ms: 3000
+          reason: "SPA hydration + redirect to tauth/login"
+        - action: fill
+          target: "login_email"
+          value: "{{credentials.username}}"
+          notes: "Inside cross-origin iframe (auth.xcurrency.com)"
+        - action: fill
+          target: "login_password"
+          value: "{{credentials.password}}"
+        - action: click
+          target: "login_auto_label"
+          notes: "Click label (not checkbox) — label intercepts pointer events"
+        - action: click
+          target: "login_submit"
+        - action: wait_for_url
+          pattern: "**/wallets/balance/**"
+
+    balances:
+      description: "Scrape per-currency balances from Wallets > Balance"
+      depends_on: login
+      steps:
+        - action: wait_for_spa
+        - action: extract_cards
+          method: js_evaluate
+          notes: "Ant Design Pro Card components; currency code is a leaf div; card container has class 'ant-pro-card'"
+      delivery:
+        type: webhook
+        url_env: "BALANCES_WEBHOOK_URL"
+        format: json
+
+  scripts:
+    balances: "scripts/xcurrency/balances.ts"
+
+  selectors_file: "selectors/xcurrency.json"

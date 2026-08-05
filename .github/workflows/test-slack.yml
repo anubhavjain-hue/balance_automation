@@ -1,0 +1,26 @@
+name: Test Slack Credentials
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Slack test message
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+        run: |
+          RESPONSE=$(curl -s -X POST https://slack.com/api/chat.postMessage \
+            -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "{\"channel\": \"${SLACK_CHANNEL_ID}\", \"text\": \":white_check_mark: Slack credentials test from GitHub Actions — secrets are working.\"}")
+          echo "Response: $RESPONSE"
+          OK=$(echo "$RESPONSE" | jq -r '.ok')
+          echo "ok=$OK"
+          if [ "$OK" != "true" ]; then
+            echo "FAILED: $(echo $RESPONSE | jq -r '.error')"
+            exit 1
+          fi
+          echo "SUCCESS: message delivered"

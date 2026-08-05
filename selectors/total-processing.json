@@ -1,0 +1,174 @@
+{
+  "partner_id": "total-processing",
+  "last_updated": "2026-03-24T15:22:54Z",
+  "selectors": {
+    "login_username": {
+      "css": "#username",
+      "source": "manual",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z"
+    },
+    "login_password": {
+      "css": "#password",
+      "source": "manual",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z"
+    },
+    "login_submit": {
+      "css": "#kc-login",
+      "source": "manual",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z"
+    },
+    "shepherd_skip": {
+      "css": ".shepherd-cancel-icon",
+      "source": "script_verified",
+      "confidence": 0.9,
+      "last_verified": "2026-03-24T15:22:54Z",
+      "notes": "Also try .button-skip, .button-secondary. Scrim overlay blocks all clicks if not dismissed — force-remove via JS as fallback."
+    },
+    "shepherd_secondary": {
+      "css": ".button-secondary",
+      "source": "manual",
+      "confidence": 0.8,
+      "last_verified": "2026-02-17T00:00:00Z"
+    },
+    "shepherd_cancel": {
+      "css": ".button-skip",
+      "source": "manual",
+      "confidence": 0.8,
+      "last_verified": "2026-02-17T00:00:00Z"
+    },
+    "overlay_scrim_remove": {
+      "css": ".v-overlay--active",
+      "source": "script_verified",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z",
+      "notes": "Force-remove via page.evaluate(() => document.querySelectorAll('.v-overlay--active').forEach(el => el.remove())) if Shepherd dismissal fails"
+    },
+    "nav_transactions": {
+      "css": "a[href=\"/transactions\"]",
+      "source": "manual",
+      "confidence": 1.0,
+      "last_verified": "2026-02-17T00:00:00Z"
+    },
+    "nav_finance_group": {
+      "role": "button",
+      "name": "Finance",
+      "playwright": "page.getByRole('button', { name: 'Finance' })",
+      "source": "script_verified",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z",
+      "notes": "Vuetify renders as role=button, NOT v-list-group__header. SKILL.md had wrong selector."
+    },
+    "nav_merchant_funding": {
+      "role": "link",
+      "name": "Merchant Funding (Beta)",
+      "playwright": "page.getByRole('link', { name: 'Merchant Funding (Beta)' })",
+      "source": "script_verified",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z",
+      "notes": "Renamed to 'Merchant Funding (Beta)' — URL is /finance/merchant-funding-embed (not /finance/merchant-funding/balances)"
+    },
+    "merchant_autocomplete_input": {
+      "role": "textbox",
+      "name": "Merchant",
+      "playwright": "page.getByRole('textbox', { name: 'Merchant' })",
+      "source": "script_verified",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z",
+      "notes": "Type merchant name, wait 1.5s for dropdown, then click option by role"
+    },
+    "merchant_option": {
+      "playwright": "page.getByRole('option', { name: 'Tazapay - EU' })",
+      "source": "script_verified",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z",
+      "notes": "Options: 'Tazapay - EU', 'Tazapay - HK'"
+    },
+    "merchant_clear_btn": {
+      "role": "button",
+      "name": "clear icon",
+      "playwright": "page.getByRole('button', { name: 'clear icon' })",
+      "source": "script_verified",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z"
+    },
+    "retool_iframe": {
+      "css": "iframe[title=\"Retool Embed\"]",
+      "playwright": "page.frameLocator('iframe[title=\"Retool Embed\"]')",
+      "source": "script_verified",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z",
+      "notes": "All merchant funding content is inside this Retool iframe. Access with frameLocator."
+    },
+    "tab_processing": {
+      "playwright": "retoolFrame.getByTestId('tabs2--0').getByTestId('Tabs::Tab::0')",
+      "source": "script_verified",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z",
+      "notes": "Must scope to tabs2--0 to avoid collision with transaction-type subtabs (tabs1--0)"
+    },
+    "tab_scheduled": {
+      "playwright": "retoolFrame.getByTestId('tabs2--0').getByTestId('Tabs::Tab::1')",
+      "source": "script_verified",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z",
+      "notes": "Must scope to tabs2--0"
+    },
+    "tab_reserve": {
+      "playwright": "retoolFrame.getByTestId('tabs2--0').getByTestId('Tabs::Tab::3')",
+      "source": "script_verified",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z",
+      "notes": "Must scope to tabs2--0"
+    },
+    "processing_gmv_label": {
+      "playwright": "retoolFrame.getByText('TOTAL GROSS TRANSACTION VALUE', { exact: true })",
+      "source": "script_verified",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z",
+      "notes": "GMV value is in nextElementSibling. Retool API takes 2-8s to load — poll until non-empty/non-zero."
+    },
+    "scheduled_nested_iframe": {
+      "playwright": "retoolFrame.frameLocator('[data-testid=\"CustomComponentIframe::scheduled_component\"]')",
+      "source": "script_verified",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z",
+      "notes": "SCHEDULED tab content is in a nested custom component iframe inside the Retool iframe. Two iframes exist in frame — must use this specific selector."
+    },
+    "scheduled_pending_label": {
+      "playwright": "scheduledFrame.getByText('PENDING BANK CLEARANCE', { exact: true })",
+      "source": "script_verified",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z",
+      "notes": "nextElementSibling contains totals text like 'USD: $22.73' or 'No pending totals'"
+    },
+    "scheduled_funding_label": {
+      "playwright": "scheduledFrame.getByText('SCHEDULED MERCHANT FUNDING', { exact: true })",
+      "source": "script_verified",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z",
+      "notes": "nextElementSibling children contain per-currency totals like 'GBP: £40,417.88'"
+    },
+    "reserve_balance_text": {
+      "playwright": "retoolFrame.locator('p:has-text(\"Balance:\")')",
+      "source": "script_verified",
+      "confidence": 1.0,
+      "last_verified": "2026-03-24T15:22:54Z",
+      "notes": "Text format: 'Balance: EUR 100,001.00'. RESERVE is directly in Retool iframe (not nested)."
+    },
+    "download_btn": {
+      "css": "button[data-test-id=\"download-report-btn\"]",
+      "source": "manual",
+      "confidence": 1.0,
+      "last_verified": "2026-02-17T00:00:00Z"
+    },
+    "csv_all_columns": {
+      "css": "text=/CSV.*ALL COLUMNS/i",
+      "source": "manual",
+      "confidence": 1.0,
+      "last_verified": "2026-02-17T00:00:00Z"
+    }
+  }
+}

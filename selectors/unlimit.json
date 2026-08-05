@@ -1,0 +1,169 @@
+{
+  "partner_id": "unlimit",
+  "last_updated": "2026-02-25T09:58:00Z",
+  "selectors": {
+    "login_username": {
+      "css": "input#username",
+      "role": "textbox[name=Username]",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:50:00Z",
+      "notes": "Keycloak SSO login at sso.unlimit.com — username/email input"
+    },
+    "login_password": {
+      "css": "input#password",
+      "role": "textbox[name=Password]",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:50:00Z",
+      "notes": "Keycloak SSO password input"
+    },
+    "login_submit": {
+      "css": "button[type='submit'], button:has(> div:text('Sign In'))",
+      "role": "button[name='Sign In']",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:50:00Z",
+      "notes": "Sign In button on Keycloak login page"
+    },
+    "totp_input": {
+      "css": "input#otp, input[name='otp']",
+      "role": "textbox[name='One-time code']",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:50:00Z",
+      "notes": "Google Authenticator TOTP code input on OTP verification page"
+    },
+    "totp_trust_checkbox": {
+      "css": "input#trustOtpDevice",
+      "source": "vision",
+      "confidence": 0.9,
+      "last_verified": "2026-02-25T09:50:00Z",
+      "notes": "Trust my device checkbox — use JS click (document.getElementById('trustOtpDevice').click()) as overlay intercepts pointer events"
+    },
+    "totp_submit": {
+      "css": "button[type='submit'], button:has(> div:text('Submit'))",
+      "role": "button[name=Submit]",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:50:00Z",
+      "notes": "Submit button on OTP verification page"
+    },
+    "nav_payments": {
+      "css": "a[href='#/payments']",
+      "role": "link[name=Payments]",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:51:00Z",
+      "notes": "Payments link in sidebar — navigates to #/payments/all"
+    },
+    "nav_all_payments": {
+      "css": "a[href='#/payments/all']",
+      "role": "link[name='All payments']",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:51:00Z",
+      "notes": "All payments submenu under Payments"
+    },
+    "filter_btn": {
+      "css": "button:has(> :text('Filter'))",
+      "role": "button[name=Filter]",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:51:00Z",
+      "notes": "Filter button on All Payments toolbar — opens query options panel"
+    },
+    "export_btn": {
+      "css": "button:has(> :text('Export'))",
+      "role": "button[name=Export]",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:57:00Z",
+      "notes": "Export button on All Payments toolbar — opens export dialog"
+    },
+    "refresh_btn": {
+      "css": "button:has(> :text('Refresh'))",
+      "role": "button[name=Refresh]",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:55:00Z",
+      "notes": "Refresh button on All Payments toolbar"
+    },
+    "filter_date_section": {
+      "css": ".filter-date, [class*='date']",
+      "source": "vision",
+      "confidence": 0.7,
+      "last_verified": "2026-02-25T09:51:00Z",
+      "notes": "Date section in filter panel — click to expand date picker"
+    },
+    "filter_confirm_btn": {
+      "css": "button:has(> :text('Confirm'))",
+      "role": "button[name=Confirm]",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:57:00Z",
+      "notes": "Confirm button in date picker — confirms date selection"
+    },
+    "filter_apply_btn": {
+      "css": "button:has(> :text('Apply'))",
+      "role": "button[name=Apply]",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:57:00Z",
+      "notes": "Apply button in filter panel — applies all filter changes"
+    },
+    "filter_cancel_btn": {
+      "css": "button:has(> :text('Cancel'))",
+      "role": "button[name=Cancel]",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:57:00Z",
+      "notes": "Cancel button in filter panel"
+    },
+    "export_xlsx_checkbox": {
+      "css": "label:has(> :text('XLSX'))",
+      "source": "manual",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T10:30:00Z",
+      "notes": "XLSX format checkbox in export dialog — click the label to DESELECT (selected by default)"
+    },
+    "export_csv_checkbox": {
+      "css": "label:has(> :text('CSV'))",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:57:00Z",
+      "notes": "CSV format checkbox in export dialog — click the label to SELECT"
+    },
+    "export_all_columns_btn": {
+      "css": "button:has(> :text('All'))",
+      "role": "button[name=All]",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:57:00Z",
+      "notes": "All columns button in export dialog — selects all 42 columns"
+    },
+    "export_dialog_export_btn": {
+      "css": "#cdk-overlay-3 button:has(> :text('Export')), .cdk-overlay-container button:has(> :text('Export'))",
+      "source": "vision",
+      "confidence": 0.9,
+      "last_verified": "2026-02-25T09:57:00Z",
+      "notes": "Export button inside the export dialog — triggers file download"
+    },
+    "cookie_agree_btn": {
+      "css": "button:has(> :text('I agree'))",
+      "role": "button[name='I agree']",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:50:00Z",
+      "notes": "Cookie/privacy notice accept button"
+    },
+    "data_notice_accept_btn": {
+      "css": "button:has(> :text('I have read and accept'))",
+      "role": "button[name='I have read and accept']",
+      "source": "vision",
+      "confidence": 1.0,
+      "last_verified": "2026-02-25T09:50:00Z",
+      "notes": "Data access notice accept button — appears on first login"
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "login_email": {
+    "selector": "input[type='email'], input[type='text']",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-14T20:22:00Z",
+    "notes": "Email/phone field on dashboard.doku.com — use .first() since type may vary by browser context"
+  },
+  "login_password": {
+    "selector": "input[type='password']",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-14T20:22:00Z",
+    "notes": "Password field on dashboard.doku.com"
+  },
+  "login_submit": {
+    "selector": "button[type='submit'], button.d-btn-primary",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-14T20:22:00Z",
+    "notes": "Login submit button (MASUK). Use JS click: document.querySelector('button[type=\"submit\"]')?.click() to bypass overlay"
+  },
+  "cookie_accept": {
+    "selector": "button[data-test='accept-cookie']",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-14T20:22:00Z",
+    "notes": "Cookie banner — optional, appears on first visit"
+  },
+  "otp_input": {
+    "selector": "input.input-otp",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-14T20:22:00Z",
+    "notes": "OTP modal has 6 INDIVIDUAL input boxes. Use otpInputs.nth(i) for each digit. Auto-submits after last digit — no submit button click needed."
+  },
+  "session_timeout_modal_button": {
+    "selector": "button.d-btn-primary",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-14T20:22:00Z",
+    "notes": "Session timeout/end modal Masuk button — intercepted by overlay, must JS click: document.querySelectorAll('button.d-btn-primary').forEach(b => b.click())"
+  },
+  "gross_volume_iframe": {
+    "selector": "xpath=//div[text()[normalize-space()='Jumlah Bruto']]/following-sibling::div[1]",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-14T20:22:00Z",
+    "notes": "Inside the DOKU summary iframe (src: /rr/homepage?uniq_id=...). Access via page.frameLocator('iframe:not([width=\"0\"])').first(). Format: 'IDR 157.902.336'"
+  },
+  "next_payout_iframe": {
+    "selector": "xpath=//div[text()[normalize-space()='Transfer Berikutnya']]/following-sibling::div[1]",
+    "source": "script_verified",
+    "confidence": 0.8,
+    "last_verified": "2026-03-14T20:22:00Z",
+    "notes": "Usually blank — treat as 0 if empty or timeout. Access via frameLocator."
+  },
+  "kirimdoku_login_email": {
+    "selector": "getByRole('textbox', { name: 'Email:' })",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-14T20:22:00Z",
+    "notes": "KirimDOKU email field — role-based selector required"
+  },
+  "kirimdoku_login_password": {
+    "selector": "getByRole('textbox', { name: 'Your password' })",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-14T20:22:00Z",
+    "notes": "KirimDOKU password field"
+  },
+  "kirimdoku_login_submit": {
+    "selector": "#start",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-14T20:22:00Z",
+    "notes": "KirimDOKU submit is <input id='start' type='submit' value='Sign in'>. Must use JS click: document.getElementById('start')?.click(). Displayed as 'SIGN IN' (CSS text-transform)"
+  },
+  "kirimdoku_credit_left": {
+    "selector": ".stat-agent:nth-child(2) > .text-statagent.fleft",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-14T20:22:00Z",
+    "notes": "Credit Left value on kirimdoku.com/v2/dashboard. Format: '3.636.160.238,010000 IDR'"
+  },
+  "_notes": {
+    "doku_iframe_src": "The DOKU summary iframe src is /rr/homepage?uniq_id=<timestamp>. The GTM iframe (hidden, width=0) appears first in DOM — use 'iframe:not([width=\"0\"])' to skip it.",
+    "kirimdoku_session_conflict": "KirimDOKU has a 2-minute session lock. If login returns 'currently logged in', navigate directly to /v2/dashboard. Server lock expires within ~2 minutes.",
+    "otp_boxes": "6 individual input.input-otp boxes. Auto-submits after filling the 6th digit.",
+    "number_format": "dashboard.doku.com uses dot thousands (IDR 157.902.336); kirimdoku.com uses dot thousands + comma decimal (3.636.160.238,010000 IDR). Apply parseIndonesianNumber() to both."
+  }
+}

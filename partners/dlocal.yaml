@@ -1,0 +1,78 @@
+partner:
+  id: dlocal
+  name: "dLocal"
+  dashboard_url: "https://dashboard.dlocal.com/"
+
+  credentials:
+    username_env: "DLOCAL_USERNAME"
+    password_env: "DLOCAL_PASSWORD"
+
+  spa:
+    wait_strategy: "load"
+    post_nav_delay_ms: 3000
+    dismiss_popups: false
+    cloudflare_wait_ms: 8000
+
+  tasks:
+    login:
+      description: "Log into Auth0-authenticated dLocal dashboard (two-step: email then password)"
+      steps:
+        - action: navigate
+          url: "{{dashboard_url}}"
+        - action: wait
+          ms: 8000
+          reason: "Cloudflare security verification"
+        - action: fill
+          target: "login_email"
+          value: "{{credentials.username}}"
+        - action: click
+          target: "login_submit"
+        - action: wait_for_spa
+        - action: fill
+          target: "login_password"
+          value: "{{credentials.password}}"
+        - action: click
+          target: "login_submit"
+        - action: wait_for_spa
+
+    report:
+      description: "Trigger emailed transaction report from Payins > Transactions"
+      depends_on: login
+      steps:
+        - action: navigate
+          url: "{{dashboard_url}}/payins/transactions?periodLabel=Custom&start={{date_from_iso}}&end={{date_to_iso}}"
+          notes: "URL-based date filtering — bypasses MUI date picker entirely"
+        - action: wait_for_spa
+        - action: click
+          target: "transactions_export_btn"
+        - action: click
+          target: "export_dialog_send_btn"
+          notes: "Click SEND REPORT in the export dialog"
+      delivery:
+        type: email
+        notes: "dLocal emails the report as CSV — no direct download available"
+
+    balances:
+      description: "Scrape balance summary from Balance > Balance Report"
+      depends_on: login
+      steps:
+        - action: navigate
+          url: "{{dashboard_url}}/balance/report"
+        - action: wait_for_spa
+        - action: extract_cards
+          targets:
+            - "available_balance"
+            - "in_transit_to_bank"
+            - "payins_in_transit"
+            - "current_balance"
+          notes: "Cards are in main ul li — each li has p[title], p[value], p[currency]"
+      delivery:
+        type: webhook
+        url_env: "BALANCES_WEBHOOK_URL"
+        format: json
+      scripts:
+        balances: "scripts/dlocal/balances.py"
+        runtime: python3
+        notes: "Uses camoufox (headless Firefox) to bypass Cloudflare bot protection"
+
+  selectors_file: "selectors/dlocal.json"

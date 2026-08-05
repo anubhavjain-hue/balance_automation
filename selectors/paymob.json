@@ -1,0 +1,79 @@
+{
+  "uae_username": {
+    "selector": "page.getByRole('textbox', { name: 'Username' })",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-25T09:00:00Z",
+    "notes": "Standard textbox on /user/login/ page"
+  },
+  "uae_password": {
+    "selector": "page.getByRole('textbox', { name: 'Password' })",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-25T09:00:00Z",
+    "notes": "Standard password textbox on /user/login/ page"
+  },
+  "uae_login_button": {
+    "selector": "page.getByRole('button', { name: 'Login' })",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-25T09:00:00Z",
+    "notes": "Login submit button"
+  },
+  "uae_totp_input": {
+    "selector": "page.getByRole('textbox', { name: 'Enter Authentication Code:' })",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-25T09:00:00Z",
+    "notes": "Single TOTP input on /account/token/ page"
+  },
+  "uae_totp_submit": {
+    "selector": "page.getByRole('button', { name: 'submit' })",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-25T09:00:00Z",
+    "notes": "TOTP form submit button (lowercase 'submit')"
+  },
+  "uae_aed_balance": {
+    "selector": "page.locator('h2').filter({ hasText: /AED/ }).first()",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-25T09:00:00Z",
+    "notes": "h2 on /home/ displaying e.g. '42537.33 AED'. Parse: replace AED, trim, parseFloat."
+  },
+  "ksa_phone_input": {
+    "selector": "page.getByRole('textbox', { name: 'Phone number' })",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-25T09:00:00Z",
+    "notes": "Phone field on KSA login. Country code +966 is pre-filled — do not clear it, just fill the local number."
+  },
+  "ksa_password": {
+    "selector": "page.getByRole('textbox', { name: 'Password' })",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-25T09:00:00Z",
+    "notes": "Password field on KSA login"
+  },
+  "ksa_sign_in_button": {
+    "selector": "page.getByRole('button', { name: 'Sign in' })",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-25T09:00:00Z",
+    "notes": "Disabled until both fields are filled. No JS click needed — normal click works after filling."
+  },
+  "ksa_transfers_link": {
+    "selector": "page.getByRole('link', { name: ' Transfers' })",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-25T09:00:00Z",
+    "notes": "Sidebar nav link. Note the leading space in the name (icon glyph prefix)."
+  },
+  "ksa_net_volume": {
+    "selector": "page.locator('p').filter({ hasText: 'Net Volume' }).first().evaluate(el => el.parentElement?.querySelector('h3')?.childNodes)",
+    "source": "script_verified",
+    "confidence": 1.0,
+    "last_verified": "2026-03-25T09:00:00Z",
+    "notes": "First 'Net Volume' paragraph (Bank Account section). h3 sibling contains numeric text node + currency symbol in a child generic. Extract text nodes only to avoid garbled currency glyph."
+  }
+}

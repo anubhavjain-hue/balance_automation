@@ -1,0 +1,72 @@
+partner:
+  id: unlimit
+  name: "Unlimit"
+  dashboard_url: "https://unlimit.com/ma-new/"
+
+  credentials:
+    username_env: "UNLIMIT_USERNAME"
+    password_env: "UNLIMIT_PASSWORD"
+    totp_secret_env: "UNLIMIT_TOTP_SECRET"
+
+  spa:
+    wait_strategy: "load"
+    post_nav_delay_ms: 3000
+    dismiss_popups: false
+
+  tasks:
+    login:
+      description: "Log into Unlimit dashboard (username/password + Google Authenticator TOTP)"
+      steps:
+        - action: navigate
+          url: "{{dashboard_url}}"
+        - action: wait_for_spa
+        - action: fill
+          target: "login_username"
+          value: "{{credentials.username}}"
+        - action: fill
+          target: "login_password"
+          value: "{{credentials.password}}"
+        - action: click
+          target: "login_submit"
+        - action: wait_for_spa
+        - action: totp_if_prompted
+          secret_env: "UNLIMIT_TOTP_SECRET"
+          trust_checkbox: true
+          notes: "If TOTP prompt appears, generate code and check 'trust for 15 days'"
+        - action: wait_for_spa
+
+    report:
+      description: "Download transaction report CSV from Payments > All Payments"
+      depends_on: login
+      steps:
+        - action: click
+          target: "nav_payments"
+        - action: click
+          target: "nav_all_payments"
+        - action: wait_for_spa
+        - action: set_date_range
+          days: "{{days}}"
+        - action: click
+          target: "filter_confirm_btn"
+          notes: "Confirm and apply the date filter"
+        - action: click
+          target: "refresh_btn"
+          notes: "Refresh the table after applying filter"
+        - action: wait_for_spa
+        - action: click
+          target: "export_btn"
+        - action: select_export_format
+          format: "csv"
+          notes: "Select CSV, not XLSX"
+        - action: select_all_columns
+          notes: "Ensure all columns are selected"
+        - action: click
+          target: "export_confirm_btn"
+        - action: wait_for_download
+      delivery:
+        type: webhook
+        url_env: "UNLIMIT_REPORT_WEBHOOK_URL"
+        format: file
+        content_type: "text/csv"
+
+  selectors_file: "selectors/unlimit.json"

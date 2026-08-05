@@ -1,0 +1,152 @@
+name: Balance Checks
+
+# Runs every hour
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch: # Allow manual runs from the Actions tab
+
+jobs:
+  balance:
+    name: ${{ matrix.partner.name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    # Run all partners in parallel; don't cancel others if one fails
+    strategy:
+      fail-fast: false
+      matrix:
+        partner:
+          - name: dlocal
+            script: scripts/dlocal/balances.py
+            runtime: python
+          - name: doku
+            script: scripts/doku/balances.ts
+            runtime: node
+          - name: paymob
+            script: scripts/paymob/balances.ts
+            runtime: node
+          - name: total-processing
+            script: scripts/total-processing/balances.ts
+            runtime: node
+          - name: xcurrency
+            script: scripts/xcurrency/balances.ts
+            runtime: node
+          # ── ADD NEW PARTNERS HERE ────────────────────────────────────────────
+          # - name: new-partner
+          #   script: scripts/new-partner/balances.ts
+          #   runtime: node   # or: python
+          # ────────────────────────────────────────────────────────────────────
+
+    # All secrets are injected as env vars. Scripts read from env first (dotenv
+    # setdefault / process.env), so no .env file is needed in CI.
+    env:
+      # Total Processing
+      TP_USERNAME: ${{ secrets.TP_USERNAME }}
+      TP_PASSWORD: ${{ secrets.TP_PASSWORD }}
+      TP_DASHBOARD_URL: ${{ secrets.TP_DASHBOARD_URL }}
+      # dLocal
+      DLOCAL_USERNAME: ${{ secrets.DLOCAL_USERNAME }}
+      DLOCAL_PASSWORD: ${{ secrets.DLOCAL_PASSWORD }}
+      DLOCAL_DASHBOARD_URL: ${{ secrets.DLOCAL_DASHBOARD_URL }}
+      # DOKU
+      DOKU_USERNAME: ${{ secrets.DOKU_USERNAME }}
+      DOKU_PASSWORD: ${{ secrets.DOKU_PASSWORD }}
+      GMAIL_USERNAME: ${{ secrets.GMAIL_USERNAME }}
+      GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+      # Paymob
+      PAYMOB_UAE_USERNAME: ${{ secrets.PAYMOB_UAE_USERNAME }}
+      PAYMOB_UAE_PASSWORD: ${{ secrets.PAYMOB_UAE_PASSWORD }}
+      PAYMOB_UAE_TOTP_SECRET: ${{ secrets.PAYMOB_UAE_TOTP_SECRET }}
+      PAYMOB_SA_PHONE_NUMBER: ${{ secrets.PAYMOB_SA_PHONE_NUMBER }}
+      PAYMOB_SA_PASSWORD: ${{ secrets.PAYMOB_SA_PASSWORD }}
+      # Unlimit
+      UNLIMIT_USERNAME: ${{ secrets.UNLIMIT_USERNAME }}
+      UNLIMIT_PASSWORD: ${{ secrets.UNLIMIT_PASSWORD }}
+      UNLIMIT_TOTP_SECRET: ${{ secrets.UNLIMIT_TOTP_SECRET }}
+      UNLIMIT_REPORT_WEBHOOK_URL: ${{ secrets.UNLIMIT_REPORT_WEBHOOK_URL }}
+      # xCurrency
+      XCURRENCY_USERNAME: ${{ secrets.XCURRENCY_USERNAME }}
+      XCURRENCY_PASSWORD: ${{ secrets.XCURRENCY_PASSWORD }}
+      # Shared
+      BALANCES_WEBHOOK_URL: ${{ secrets.BALANCES_WEBHOOK_URL }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── Node.js (TypeScript scripts via tsx) ─────────────────────────────────
+      - name: Setup Node.js
+        if: matrix.partner.runtime == 'node'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Node dependencies
+        if: matrix.partner.runtime == 'node'
+        run: npm ci
+
+      - name: Cache Playwright browsers
+        if: matrix.partner.runtime == 'node'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Playwright + browser
+        if: matrix.partner.runtime == 'node'
+        run: npx playwright install --with-deps chromium
+
+      # ── Python (camoufox / Firefox scripts) ──────────────────────────────────
+      - name: Setup Python
+        if: matrix.partner.runtime == 'python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Cache pip packages
+        if: matrix.partner.runtime == 'python'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-camoufox-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: pip-camoufox-
+
+      - name: Cache camoufox browser
+        if: matrix.partner.runtime == 'python'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/camoufox
+          key: camoufox-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: camoufox-
+
+      - name: Install Python dependencies
+        if: matrix.partner.runtime == 'python'
+        run: |
+          pip install "camoufox[geoip]"
+          python -m camoufox fetch
+
+      # ── Pre-run setup ─────────────────────────────────────────────────────────
+      - name: Create temp directory
+        run: mkdir -p .tmp
+
+      # ── Execute ───────────────────────────────────────────────────────────────
+      - name: Run balances (node)
+        if: matrix.partner.runtime == 'node'
+        run: npx tsx ${{ matrix.partner.script }}
+
+      - name: Run balances (python)
+        if: matrix.partner.runtime == 'python'
+        run: python ${{ matrix.partner.script }}
+
+      # ── Artifacts (screenshots on failure) ───────────────────────────────────
+      - name: Upload debug screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-${{ matrix.partner.name }}-${{ github.run_id }}
+          path: .tmp/
+          retention-days: 3
